@@ -51,7 +51,7 @@ function calc(){
  $('produto').textContent=money(p);$('mao').textContent=money(h);$('total').textContent=money(p+h);
 }
 document.querySelectorAll('input').forEach(x=>x.addEventListener('input',calc));
-$('clear').onclick=()=>{[['custo',0],['var',11],['fix',43],['lucro',20],['horas',0],['min',0],['hora',100],['comp',0]].forEach(x=>$(x[0]).value=x[1]);calc()};
+$('clear').onclick=()=>{[['custo',0],['var',11],['fix',43],['lucro',20],['horas',0],['min',0],['hora',120],['comp',0]].forEach(x=>$(x[0]).value=x[1]);calc()};
 calc();
 </script>
 </body></html>
