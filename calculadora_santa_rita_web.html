@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Calculadora de Preço de Venda - Santa Rita Auto Center</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f3f6f9;color:#1f2937}
+main{max-width:760px;margin:auto;padding:20px 14px 40px}.top{background:#1f4e78;color:#fff;padding:22px;border-radius:14px 14px 0 0}
+h1{margin:0;font-size:23px}h2{font-size:17px;color:#1f4e78;margin:0 0 14px}
+.card{background:#fff;padding:22px;border:1px solid #ddd}.sec{margin-bottom:25px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}label{font-weight:bold;font-size:14px;display:block;margin-bottom:6px}
+input{width:100%;padding:13px;border:1px solid #cbd5e1;border-radius:8px;font-size:16px}
+.result{background:#e2f0d9;border:1px solid #b7d7a8;border-radius:10px;padding:17px}
+.row{display:flex;justify-content:space-between;padding:8px 0;gap:10px}.total{border-top:1px solid #b7d7a8;margin-top:8px;padding-top:14px;font-size:21px;font-weight:bold}
+button{width:100%;padding:14px;margin-top:16px;background:#1f4e78;color:white;border:0;border-radius:8px;font-size:16px;font-weight:bold}
+@media(max-width:560px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main><div class="top"><h1>Calculadora de Preço de Venda</h1><div>Santa Rita Auto Center</div></div>
+<div class="card">
+<div class="sec"><h2>1. Produto</h2><div class="grid">
+<div><label>Custo do produto (R$)</label><input id="custo" type="number" min="0" step=".01" value="0"></div>
+<div><label>Impostos + outros variáveis (%)</label><input id="var" type="number" min="0" step=".01" value="11"></div>
+<div><label>Custos fixos (%)</label><input id="fix" type="number" min="0" step=".01" value="43"></div>
+<div><label>Lucro desejado (%)</label><input id="lucro" type="number" min="0" step=".01" value="20"></div>
+</div></div>
+<div class="sec"><h2>2. Hora técnica / mão de obra</h2><div class="grid">
+<div><label>Horas trabalhadas</label><input id="horas" type="number" min="0" step=".01" value="0"></div>
+<div><label>Minutos adicionais</label><input id="min" type="number" min="0" max="59" value="0"></div>
+<div><label>Valor da hora técnica (R$)</label><input id="hora" type="number" min="0" step=".01" value="100"></div>
+<div><label>Adicional de complexidade (%)</label><input id="comp" type="number" min="0" step=".01" value="0"></div>
+</div></div>
+<div class="sec"><h2>3. Resultado</h2><div class="result">
+<div class="row"><span>Markup</span><b id="markup">0,00x</b></div>
+<div class="row"><span>Preço de venda do produto</span><b id="produto">R$ 0,00</b></div>
+<div class="row"><span>Valor da mão de obra</span><b id="mao">R$ 0,00</b></div>
+<div class="row total"><span>VALOR FINAL SUGERIDO</span><span id="total">R$ 0,00</span></div>
+</div></div>
+<button id="clear">Limpar calculadora</button>
+</div></main>
+<script>
+const $=id=>document.getElementById(id), n=id=>Math.max(0,Number($(id).value)||0);
+const money=v=>v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+function calc(){
+ let d=1-n('var')/100-n('fix')/100-n('lucro')/100;
+ let m=d>0?1/d:0, p=n('custo')*m;
+ let h=(n('horas')+Math.min(n('min'),59)/60)*n('hora')*(1+n('comp')/100);
+ $('markup').textContent=m?m.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'x':'Inválido';
+ $('produto').textContent=money(p);$('mao').textContent=money(h);$('total').textContent=money(p+h);
+}
+document.querySelectorAll('input').forEach(x=>x.addEventListener('input',calc));
+$('clear').onclick=()=>{[['custo',0],['var',11],['fix',43],['lucro',20],['horas',0],['min',0],['hora',100],['comp',0]].forEach(x=>$(x[0]).value=x[1]);calc()};
+calc();
+</script>
+</body></html>
